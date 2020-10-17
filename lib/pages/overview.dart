@@ -11,6 +11,7 @@ class OverviewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var dateFormat = DateFormat('dd.MM.yyyy');
+    var currencyFormat = NumberFormat.currency(locale: 'de_DE');
 
     return Scaffold(
       appBar: AppBar(title: Text("Sammlung"),),
@@ -18,7 +19,7 @@ class OverviewPage extends StatelessWidget {
         children: this.samples.map((e) => ListTile(
           title: Text('${e.serial} - ${e.mineral}'),
           subtitle: Text('Gefunden ${e.location} am ${dateFormat.format(e.timeStamp)}'),
-          trailing: Text('${e.value}'),
+          trailing: Text('${currencyFormat.format(e.value)}'),
           onTap: ()=>Navigator.of(context).pushNamed(Routes.Details, arguments: e),
         )).toList(),
       ),
