@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:minerals_register/routes/routes.dart';
 
 class LoginPage extends StatelessWidget {
   final TextEditingController _usernameController = TextEditingController();
@@ -13,6 +14,7 @@ class LoginPage extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              FlutterLogo(size: 100.0),
               TextField(
                 controller: _usernameController,
                 decoration: InputDecoration(labelText: 'Mail-Adresse'),
@@ -24,8 +26,9 @@ class LoginPage extends StatelessWidget {
                 obscureText: true,
               ),
               RaisedButton(
-                onPressed: () => {
-                  print('Login with${_usernameController.text}:${_passwordController.text}')
+                onPressed: () {
+                  print('Login with ${_usernameController.text}:${_passwordController.text}');
+                  Navigator.of(context).pushReplacementNamed(Routes.Overview);
                 },
                 child: Text('Login'),
               ),

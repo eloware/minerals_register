@@ -14,4 +14,10 @@ class Sample {
   String size; // Größe
   String annotation; // Bemerkung
   String sideMineral; // Begleitmineral
+
+  Sample();
+
+  static Sample fromJson(Map<String, dynamic> json) {
+    return _$SampleFromJson(json);
+  }
 }

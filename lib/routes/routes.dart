@@ -1,20 +1,41 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:minerals_register/models/sample.dart';
 import 'package:minerals_register/pages/login.dart';
 import 'package:minerals_register/pages/overview.dart';
+import 'package:minerals_register/pages/sample_details.dart';
 
 class Routes {
-  static const String Home = '';
+  static const String Home = '/';
   static const String Login = '/login';
   static const String Overview = '/overview';
+  static const String Details = '/details';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case Home:
       case Login:
         return MaterialPageRoute(builder: (context) => LoginPage());
+      case Details:
+        return MaterialPageRoute(builder: (context)=>SampleDetailsPage(sample: settings.arguments as Sample,));
       case Overview:
-        return MaterialPageRoute(builder: (context) => OverviewPage());
+        return MaterialPageRoute(
+            builder: (context) => OverviewPage(
+                  samples: [
+                    Sample.fromJson({
+                      'id': '0011',
+                      'serial': 'CR 00001',
+                      'timeStamp': DateTime.now().toString(),
+                      'mineral': 'Aurum',
+                      'location': 'Brazil',
+                      'value': 4500.14,
+                      'origin': 'Cave',
+                      'size': 'BIG',
+                      'annotation': 'This is an annotation',
+                      'sideMineral': 'Argentum',
+                    })
+                  ],
+                ));
     }
 
     return MaterialPageRoute(
