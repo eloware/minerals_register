@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:minerals_register/models/sample.dart';
 import 'package:minerals_register/routes/routes.dart';
+import 'package:minerals_register/services/formats.dart';
 
 class SampleDetailsPage extends StatelessWidget {
   final Sample sample;
@@ -26,12 +27,13 @@ class SampleDetailsPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              if (sample.imageUrl != null) Image.network(sample.imageUrl),
               HeadLinedText(text: sample.serial, headline: 'Probennummer'),
               HeadLinedText(text: sample.mineral, headline: 'Mineral'),
               HeadLinedText(text: sample.sideMineral, headline: 'Begleitmineral'),
               HeadLinedText(text: sample.location, headline: 'Fundort'),
-              HeadLinedText(text: sample.timeStamp?.toString(), headline: 'Datum'),
-              HeadLinedText(text: sample.value?.toString(), headline: 'Wert'),
+              HeadLinedText(text: sample.timeStamp != null ? Formats.dateFormat.format(sample.timeStamp) : '', headline: 'Datum'),
+              HeadLinedText(text: sample.value != null ? Formats.currencyFormat.format(sample.value) : '', headline: 'Wert'),
               HeadLinedText(text: sample.size, headline: 'Größe'),
               HeadLinedText(text: sample.origin, headline: 'Herkunft'),
               HeadLinedText(text: sample.annotation, headline: 'Bemerkung'),

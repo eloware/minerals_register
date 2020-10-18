@@ -16,10 +16,13 @@ class Sample {
   String size;
   String annotation;
   String sideMineral;
+  String imageUrl;
+  String geoLocation;
 
   Sample();
 
-  static Sample fromJson(Map<String, dynamic> json) {
+
+  factory Sample.fromJson(Map<String, dynamic> json) {
     return _$SampleFromJson(json);
   }
 

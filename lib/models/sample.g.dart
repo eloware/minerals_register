@@ -19,7 +19,9 @@ Sample _$SampleFromJson(Map<String, dynamic> json) {
     ..origin = json['origin'] as String
     ..size = json['size'] as String
     ..annotation = json['annotation'] as String
-    ..sideMineral = json['sideMineral'] as String;
+    ..sideMineral = json['sideMineral'] as String
+    ..imageUrl = json['imageUrl'] as String
+    ..geoLocation = json['geoLocation'] as String;
 }
 
 Map<String, dynamic> _$SampleToJson(Sample instance) => <String, dynamic>{
@@ -33,4 +35,6 @@ Map<String, dynamic> _$SampleToJson(Sample instance) => <String, dynamic>{
       'size': instance.size,
       'annotation': instance.annotation,
       'sideMineral': instance.sideMineral,
+      'imageUrl': instance.imageUrl,
+      'geoLocation': instance.geoLocation,
     };
