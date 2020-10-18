@@ -12,18 +12,10 @@ class OverviewPage extends StatelessWidget {
     var sample =
         (await Navigator.of(context).pushNamed(Routes.EditSample)) as Sample;
     if (sample == null) return;
-
-    await FirebaseDatabase.instance
-        .reference()
-        .child(context.read<LocalUser>().samplePath)
-        .push()
-        .set(sample.toJson());
   }
 
   @override
   Widget build(BuildContext context) {
-    var dateFormat = DateFormat('dd.MM.yyyy');
-    var currencyFormat = NumberFormat.currency(locale: 'de_DE');
     var samplePath = context.watch<LocalUser>().samplePath;
     return Scaffold(
         appBar: AppBar(
@@ -62,13 +54,20 @@ class OverviewPage extends StatelessWidget {
 
 class _SampleListTile extends StatelessWidget {
   final Sample sample;
+  final dateFormat = DateFormat('dd.MM.yyyy');
+  final currencyFormat = NumberFormat.currency(locale: 'de_DE');
 
-  const _SampleListTile({Key key, this.sample}) : super(key: key);
+  _SampleListTile({Key key, this.sample}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(sample.serial),
+      title: Text('${sample.serial} - ${sample.mineral}'),
+      subtitle: Text(
+          'Gefunden ${sample.location ?? '💁‍♂️'} am ${sample.timeStamp != null ? dateFormat.format(sample.timeStamp) : 'Keine Angabe'}'),
+      trailing: Text(sample.value != null
+          ? currencyFormat.format(sample?.value ?? 0)
+          : '<na>'),
       onTap: () =>
           Navigator.of(context).pushNamed(Routes.Details, arguments: sample),
     );
