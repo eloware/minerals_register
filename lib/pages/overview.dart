@@ -16,7 +16,8 @@ class OverviewPage extends StatelessWidget {
     await FirebaseDatabase.instance
         .reference()
         .child(context.read<LocalUser>().samplePath)
-        .push().set(sample.toJson());
+        .push()
+        .set(sample.toJson());
   }
 
   @override
@@ -38,13 +39,17 @@ class OverviewPage extends StatelessWidget {
           child: Text('Menü...'),
         ),
         body: StreamBuilder(
-          stream: FirebaseDatabase.instance
-              .reference()
-              .child('users/$samplePath/samples')
-              .onValue,
+          stream:
+              FirebaseDatabase.instance.reference().child(samplePath).onValue,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return Container();
+              var sample = Sample.listFromDb(snapshot);
+              return ListView.builder(
+                itemCount: sample.length,
+                itemBuilder: (context, index) => _SampleListTile(
+                  sample: sample[index],
+                ),
+              );
             }
 
             return LoadingData(
