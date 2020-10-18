@@ -20,4 +20,6 @@ class Sample {
   static Sample fromJson(Map<String, dynamic> json) {
     return _$SampleFromJson(json);
   }
+
+  Map<String, dynamic> toJson()=>_$SampleToJson(this);
 }
