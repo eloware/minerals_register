@@ -16,6 +16,7 @@ The current sample dataset contains:
   String sideMineral;
   String imageUrl;
   String geoLocation;
+  String analytics;
 ```
 
 ## Backend
