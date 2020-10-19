@@ -6,6 +6,13 @@ part 'sample.g.dart';
 
 @JsonSerializable()
 class Sample {
+  static const List<String> AnalyticMethode = [
+    'XRD',
+    'SEM-EDS',
+    'RAMAN',
+    'MICROPROBE'
+  ];
+
   String id;
   String serial;
   String mineral;
@@ -18,9 +25,9 @@ class Sample {
   String sideMineral;
   String imageUrl;
   String geoLocation;
+  String analytics;
 
   Sample();
-
 
   factory Sample.fromJson(Map<String, dynamic> json) {
     return _$SampleFromJson(json);
