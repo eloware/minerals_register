@@ -29,7 +29,37 @@ class OverviewPage extends StatelessWidget {
           ],
         ),
         drawer: Drawer(
-          child: Text('Menü...'),
+          child: Column(
+            children: [
+              DrawerHeader(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Mineralien',
+                      style: Theme.of(context).textTheme.headline4,
+                    ),
+                  ],
+                ),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor,
+                ),
+              ),
+              Expanded(
+                child: Container(),
+              ),
+              FlatButton(
+                child: Text('Logout'),
+                onPressed: () {
+                  context.read<LocalUser>().logout();
+                  Navigator.of(context).pushNamedAndRemoveUntil(Routes.Login, (route) => false);
+                },
+              ),
+              SizedBox(
+                height: 20,
+              ),
+            ],
+          ),
         ),
         body: StreamBuilder(
           stream:

@@ -3,18 +3,24 @@ import 'package:flutter/material.dart';
 import 'package:minerals_register/models/user.dart';
 import 'package:minerals_register/routes/routes.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatelessWidget {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  void _login(BuildContext context) async {
+  void _login(BuildContext context, String username, String password) async {
     try {
-      var user = await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: _usernameController.text, password: _passwordController.text);
+      var user = await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: username, password: password);
 
       if (user != null) {
         context.read<LocalUser>().firebaseCredential = user;
+
+        var prefs = await SharedPreferences.getInstance();
+        prefs.setString('username', _usernameController.text);
+        prefs.setString('password', _passwordController.text);
+
         Navigator.of(context)
             .pushNamedAndRemoveUntil(Routes.Overview, (route) => false);
       }
@@ -36,6 +42,14 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SharedPreferences.getInstance().then((prefs) {
+      if (prefs.containsKey('username') && prefs.containsKey('password')) {
+        var userName = prefs.getString('username');
+        var password = prefs.getString('password');
+        _login(context, userName, password);
+      }
+    });
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(15.0),
@@ -55,7 +69,8 @@ class LoginPage extends StatelessWidget {
                 obscureText: true,
               ),
               RaisedButton(
-                onPressed: () => _login(context),
+                onPressed: () => _login(context, _usernameController.text,
+                    _passwordController.text),
                 child: Text('Login'),
               ),
               FlatButton(
