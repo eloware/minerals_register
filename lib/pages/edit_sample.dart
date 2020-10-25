@@ -38,7 +38,7 @@ class EditSamplePage extends StatelessWidget {
         child: Column(
           children: [
                 SizedBox(height: 8,),
-                SampleImage(imageName: sample.imageName, canChange: true),
+                SampleImage(imageName: sample?.imageName, canChange: true, changedImage: (_){},),
           ],
         ),
       ),

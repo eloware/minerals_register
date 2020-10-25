@@ -8,6 +8,7 @@
 .buildlog/
 .history
 .svn/
+timeRecording.md
 
 # IntelliJ related
 *.iml
