@@ -10,6 +10,9 @@ class LoginPage extends StatelessWidget {
   final TextEditingController _passwordController = TextEditingController();
 
   void _login(BuildContext context, String username, String password) async {
+    if ((username ?? '') == '' || (password ?? '') == '')
+      return;
+
     try {
       var user = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: username, password: password);

@@ -1,6 +1,5 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:minerals_register/models/sample.dart';
 import 'package:minerals_register/models/user.dart';
 import 'package:minerals_register/routes/routes.dart';

@@ -1,7 +1,9 @@
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:minerals_register/models/sample.dart';
 import 'package:minerals_register/models/user.dart';
+import 'package:minerals_register/widgets/sample_image.dart';
 import 'package:provider/provider.dart';
 
 class EditSamplePage extends StatelessWidget {
@@ -16,11 +18,12 @@ class EditSamplePage extends StatelessWidget {
           .child(context.read<LocalUser>().samplePath)
           .push()
           .set(sample.toJson());
-    else await FirebaseDatabase.instance
-        .reference()
-        .child(context.read<LocalUser>().samplePath)
-        .child(sample.id)
-        .set(sample.toJson());
+    else
+      await FirebaseDatabase.instance
+          .reference()
+          .child(context.read<LocalUser>().samplePath)
+          .child(sample.id)
+          .set(sample.toJson());
 
     Navigator.of(context).pop(Sample());
   }
@@ -33,7 +36,10 @@ class EditSamplePage extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         child: Column(
-          children: [],
+          children: [
+                SizedBox(height: 8,),
+                SampleImage(imageName: sample.imageName, canChange: true),
+          ],
         ),
       ),
     );

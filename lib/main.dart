@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:minerals_register/models/user.dart';
 import 'package:minerals_register/routes/routes.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

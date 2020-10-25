@@ -14,9 +14,10 @@ The current sample dataset contains:
   String size;
   String annotation;
   String sideMineral;
-  String imageUrl;
+  String imageName;
   String geoLocation;
   String analytics;
+  String sampleNumber;
 ```
 
 ## Backend

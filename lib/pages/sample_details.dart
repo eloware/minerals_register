@@ -1,10 +1,8 @@
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:minerals_register/models/sample.dart';
-import 'package:minerals_register/models/user.dart';
 import 'package:minerals_register/routes/routes.dart';
 import 'package:minerals_register/services/formats.dart';
-import 'package:provider/provider.dart';
+import 'package:minerals_register/widgets/sample_image.dart';
 
 class SampleDetailsPage extends StatelessWidget {
   final Sample sample;
@@ -13,7 +11,6 @@ class SampleDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var userId = context.watch<LocalUser>().userId;
     return Scaffold(
       appBar: AppBar(
         title: Text(sample.serial),
@@ -32,28 +29,9 @@ class SampleDetailsPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (sample.imageName != null)
-                Container(
-                  height: MediaQuery.of(context).size.width * .75,
-                  child: Center(
-                    child: FutureBuilder(
-                      future: FirebaseStorage.instance
-                          .ref()
-                          .child(userId)
-                          .child(sample.imageName)
-                          .getDownloadURL(),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasData)
-                          return Image.network(
-                            snapshot.data,
-                             loadingBuilder: (context, child, loadingProgress) =>
-                             loadingProgress == null ?    child : CircularProgressIndicator(),
-
-                          );
-                        return CircularProgressIndicator();
-                      },
-                    ),
-                  ),
-                ),
+                SampleImage(imageName: sample.imageName),
+              HeadLinedText(
+                  text: sample.sampleNumber, headline: 'Probennummer'),
               HeadLinedText(text: sample.serial, headline: 'Probennummer'),
               HeadLinedText(text: sample.mineral, headline: 'Mineral'),
               HeadLinedText(
@@ -71,6 +49,7 @@ class SampleDetailsPage extends StatelessWidget {
                   headline: 'Wert'),
               HeadLinedText(text: sample.size, headline: 'Größe'),
               HeadLinedText(text: sample.origin, headline: 'Herkunft'),
+              HeadLinedText(text: sample.analytics, headline: 'Analysmethode'),
               HeadLinedText(text: sample.annotation, headline: 'Bemerkung'),
             ],
           ),
