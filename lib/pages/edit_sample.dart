@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -19,39 +21,42 @@ class EditSamplePage extends StatefulWidget {
 class _EditSamplePageState extends State<EditSamplePage> {
   final _formKey = GlobalKey<FormState>();
 
-  String _id;
-  String _serial;
-  String _mineral;
-  String _location;
-  String _timeStamp;
-  String _value;
-  String _origin;
-  String _size;
-  String _annotation;
-  String _sideMineral;
-  String _imageName;
-  String _geoLocation;
-  String _analytics;
-  String _sampleNumber;
-
+  Sample _sample;
+  Uint8List _image;
+  bool _imageChanged = false;
 
   void _store(BuildContext context) async {
-    return;
 
-    if (widget.sample.id == null)
+    if(!_formKey.currentState.validate()) return;
+
+
+
+    if (widget.sample?.id == null) {
       await FirebaseDatabase.instance
           .reference()
           .child(context.read<LocalUser>().samplePath)
           .push()
-          .set(widget.sample.toJson());
-    else
+          .set(_sample.toJson());
+    } else {
       await FirebaseDatabase.instance
           .reference()
           .child(context.read<LocalUser>().samplePath)
           .child(widget.sample.id)
           .set(widget.sample.toJson());
-
+    }
     Navigator.of(context).pop(Sample());
+  }
+
+  void _updateValues() {
+
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.sample != null)
+      _sample = widget.sample;
+    else _sample = Sample();
   }
 
   @override
@@ -60,8 +65,14 @@ class _EditSamplePageState extends State<EditSamplePage> {
       appBar: AppBar(
         title: Text(widget.sample?.serial ?? 'Neue Probe'),
         actions: [
-          IconButton(icon: Icon(Icons.cancel),onPressed: ()=>Navigator.of(context).pop(),),
-          IconButton(icon: Icon(Icons.save),onPressed: ()=>_store(context),),
+          IconButton(
+            icon: Icon(Icons.cancel),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          IconButton(
+            icon: Icon(Icons.save),
+            onPressed: () => _store(context),
+          ),
         ],
       ),
       body: Padding(
@@ -71,22 +82,48 @@ class _EditSamplePageState extends State<EditSamplePage> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                    SizedBox(height: 8,),
-                    SampleImage(imageName: widget.sample?.imageName, canChange: true, changedImage: (_){},),
-                TextFormField(onChanged: (v)=>_serial = v, decoration: InputDecoration(labelText: 'Probennummer'),initialValue: widget.sample?.serial ?? '',),
-                TextFormField(onChanged: (v)=>_sampleNumber = v, decoration: InputDecoration(labelText: 'Probennummer'),initialValue: widget.sample?.sampleNumber ?? '',),
-                TextFormField(onChanged: (v)=>_mineral = v, decoration: InputDecoration(labelText: 'Mineral'),initialValue: widget.sample?.mineral ?? '',),
-                TextFormField(onChanged: (v)=>_sideMineral = v, decoration: InputDecoration(labelText: 'Begeleitmineral'),initialValue: widget.sample?.sideMineral ?? '',),
-                TextFormField(onChanged: (v)=>_location = v, decoration: InputDecoration(labelText: 'Fundort'),initialValue: widget.sample?.location ?? '',),
-                TextFormField(onChanged: (v)=>_timeStamp = v, decoration: InputDecoration(labelText: 'Datum'),initialValue: Formats.dateFormat.format(widget.sample?.timeStamp ?? DateTime.now()),),
-                TextFormField(onChanged: (v)=>_value = v, decoration: InputDecoration(labelText: 'Wert'),initialValue: Formats.doubleFormat.format(widget.sample?.value ?? 0.0),),
-                TextFormField(onChanged: (v)=>_size = v, decoration: InputDecoration(labelText: 'Größe'),initialValue: widget.sample?.size ?? '',),
-                TextFormField(onChanged: (v)=>_origin = v, decoration: InputDecoration(labelText: 'Herkunft'),initialValue: widget.sample?.origin ?? '',),
-                TextFormField(onChanged: (v)=>_analytics = v, decoration: InputDecoration(labelText: 'Analysemethode'),initialValue: widget.sample?.analytics ?? '',),
+                SizedBox(
+                  height: 8,
+                ),
+                SampleImage(
+                  imageName: widget.sample?.imageName,
+                  canChange: true,
+                  cancelChanges: () => _imageChanged = false,
+                  changedImage: (image) {
+                    _imageChanged = true;
+                    _image = image;
+                  },
+                ),
+                TextFormField(onChanged: (v)=>_sample.serial = v, decoration: InputDecoration(labelText: 'Probennummer'),initialValue: widget.sample?.serial ?? '',),
+                TextFormField(onChanged: (v)=>_sample.sampleNumber = v, decoration: InputDecoration(labelText: 'Probennummer'),initialValue: widget.sample?.sampleNumber ?? '',),
+                TextFormField(onChanged: (v)=>_sample.mineral = v, decoration: InputDecoration(labelText: 'Mineral'),initialValue: widget.sample?.mineral ?? '',),
+                TextFormField(onChanged: (v)=>_sample.sideMineral = v, decoration: InputDecoration(labelText: 'Begeleitmineral'),initialValue: widget.sample?.sideMineral ?? '',),
+                TextFormField(onChanged: (v)=>_sample.location = v, decoration: InputDecoration(labelText: 'Fundort'),initialValue: widget.sample?.location ?? '',),
+                TextFormField(
+                  onChanged: (v)=>_sample.timeStamp = Formats.dateFormat.parse(v),
+                  validator: (value) {
+                    if (!RegExp('^[0-9]{2}.[0-9]{2}.[0-9]{2,4}\$').hasMatch(value))
+                      return 'Falsches Format';
+                    return null;
+                  },
+                  decoration: InputDecoration(labelText: 'Datum'),
+                  initialValue: Formats.dateFormat
+                      .format(widget.sample?.timeStamp ?? DateTime.now()),
+                ),
+                TextFormField(
+                  validator: (value){
+                    if (!RegExp('^[0-9]{0,}[,]{0,1}[0-9]{0,}\$').hasMatch(value))
+                      return 'Falsches Format';
+                    return null;
+                  },
+                  onChanged: (v)=>_sample.value = Formats.doubleFormat.parse(v), decoration: InputDecoration(labelText: 'Wert'),initialValue: Formats.doubleFormat.format(widget.sample?.value ?? 0.0),),
+                TextFormField(onChanged: (v)=>_sample.size = v, decoration: InputDecoration(labelText: 'Größe'),initialValue: widget.sample?.size ?? '',),
+                TextFormField(onChanged: (v)=>_sample.origin = v, decoration: InputDecoration(labelText: 'Herkunft'),initialValue: widget.sample?.origin ?? '',),
+                TextFormField(onChanged: (v)=>_sample.analytics = v, decoration: InputDecoration(labelText: 'Analysemethode'),initialValue: widget.sample?.analytics ?? '',),
                 TextFormField(
                   minLines: 10,
                   maxLines: 15,
-                  onChanged: (v)=>_annotation = v, decoration: InputDecoration(labelText: 'Bemerkung'),initialValue: widget.sample?.annotation ?? '',),
+                  onChanged: (v)=>_sample.annotation = v, decoration: InputDecoration(labelText: 'Bemerkung'),initialValue: widget.sample?.annotation ?? '',),
               ],
             ),
           ),

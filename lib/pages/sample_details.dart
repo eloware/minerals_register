@@ -13,7 +13,7 @@ class SampleDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(sample.serial),
+        title: Text(sample.serial ?? '<n/a>'),
         actions: [
           IconButton(
             icon: Icon(Icons.edit),

@@ -11,12 +11,13 @@ class SampleImage extends StatefulWidget {
   final String imageName;
   final bool canChange;
   final Function(Uint8List) changedImage;
+  final Function() cancelChanges;
 
   SampleImage(
-      {Key key, this.imageName, this.canChange = false, this.changedImage})
+      {Key key, this.imageName, this.canChange = false, this.changedImage, this.cancelChanges})
       : super(key: key) {
-    if (canChange && changedImage == null)
-      throw 'canChange requires change function';
+    if (canChange && (changedImage == null || cancelChanges == null))
+      throw 'canChange requires changeImage and cancelChanges function';
   }
 
   @override
