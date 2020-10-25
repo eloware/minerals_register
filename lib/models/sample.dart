@@ -43,7 +43,8 @@ class Sample {
       (snapshot.data as Event)
           .snapshot
           .value
-          .entries
-          .map<Sample>((e) => Sample.fromDb(e))
-          .toList();
+          ?.entries
+          ?.map<Sample>((e) => Sample.fromDb(e))
+          ?.toList() ??
+      List<Sample>();
 }

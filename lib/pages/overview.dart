@@ -66,6 +66,9 @@ class OverviewPage extends StatelessWidget {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               var sample = Sample.listFromDb(snapshot);
+              if (sample.length == 0)
+                return Center(child: Text('Keine Proben vorhanden'),);
+
               return ListView.builder(
                 itemCount: sample.length,
                 itemBuilder: (context, index) => _SampleListTile(
