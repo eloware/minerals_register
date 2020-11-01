@@ -12,11 +12,19 @@ class SampleImage extends StatefulWidget {
   final bool canChange;
   final Function(Uint8List) changedImage;
   final Function() cancelChanges;
+  final bool autoSave;
 
   SampleImage(
-      {Key key, this.imageName, this.canChange = false, this.changedImage, this.cancelChanges})
+      {Key key,
+      this.imageName,
+      this.canChange = false,
+      this.changedImage,
+      this.cancelChanges,
+      this.autoSave})
       : super(key: key) {
-    if (canChange && (changedImage == null || cancelChanges == null))
+    if (canChange &&
+        !autoSave &&
+        (changedImage == null || cancelChanges == null))
       throw 'canChange requires changeImage and cancelChanges function';
   }
 
@@ -28,11 +36,11 @@ class _SampleImageState extends State<SampleImage> {
   Uint8List _image;
   bool _hasChanged = false;
 
-  Future<void> _removeImage(BuildContext context) async{
+  Future<void> _removeImage(BuildContext context) async {
     await Future.delayed(Duration(seconds: 1));
 
     widget.changedImage(null);
-    setState((){
+    setState(() {
       _image = null;
       _hasChanged = true;
     });
@@ -62,7 +70,7 @@ class _SampleImageState extends State<SampleImage> {
             ));
     if (result == null) return;
 
-    var image = await ImagePicker().getImage(source: result);
+    var image = await ImagePicker().getImage(source: result, maxWidth: 4096);
     var imageData = await image.readAsBytes();
     setState(() {
       _image = imageData;
@@ -71,12 +79,15 @@ class _SampleImageState extends State<SampleImage> {
     if (widget.changedImage != null) widget.changedImage(imageData);
   }
 
-  Widget _getImageWidget(){
-    if (_hasChanged && _image == null || (!_hasChanged && widget.imageName == null))
-      return  Icon(Icons.image_not_supported_outlined, size: 80,);
+  Widget _getImageWidget() {
+    if (_hasChanged && _image == null ||
+        (!_hasChanged && widget.imageName == null))
+      return Icon(
+        Icons.image_not_supported_outlined,
+        size: 80,
+      );
 
-    if (_hasChanged || widget.imageName == null)
-      return Image.memory(_image);
+    if (_hasChanged || widget.imageName == null) return Image.memory(_image);
 
     return _FirestoreImage(imageName: widget.imageName);
   }
@@ -118,7 +129,7 @@ class _SampleImageState extends State<SampleImage> {
             bottom: 70,
             child: IconButton(
               icon: Icon(Icons.undo),
-              onPressed: ()=>setState(()=>_hasChanged = false),
+              onPressed: () => setState(() => _hasChanged = false),
             ),
           ),
       ],
@@ -134,22 +145,20 @@ class _FirestoreImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-            future: FirebaseStorage.instance
-                .ref()
-                .child(context.watch<LocalUser>().userId)
-                .child(imageName)
-                .getDownloadURL(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData)
-                return Image.network(
-                  snapshot.data,
-                  loadingBuilder: (context, child, loadingProgress) =>
-                      loadingProgress == null
-                          ? child
-                          : CircularProgressIndicator(),
-                );
-              return CircularProgressIndicator();
-            },
+      future: FirebaseStorage.instance
+          .ref()
+          .child(context.watch<LocalUser>().userId)
+          .child(imageName)
+          .getDownloadURL(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData)
+          return Image.network(
+            snapshot.data,
+            loadingBuilder: (context, child, loadingProgress) =>
+                loadingProgress == null ? child : CircularProgressIndicator(),
           );
+        return CircularProgressIndicator();
+      },
+    );
   }
 }
