@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:minerals_register/Themes.dart';
 import 'package:minerals_register/models/user.dart';
 import 'package:minerals_register/routes/routes.dart';
 import 'package:provider/provider.dart';
@@ -19,9 +20,8 @@ class MyApp extends StatelessWidget {
         create: (_) => LocalUser(),
         child: MaterialApp(
           title: 'Flutter Demo',
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-          ),
+          theme: Themes.lightTheme,
+          darkTheme: Themes.darkTheme,
           initialRoute: Routes.Login,
           onGenerateRoute: Routes.generateRoute,
         ));
