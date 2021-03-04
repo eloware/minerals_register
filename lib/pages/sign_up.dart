@@ -64,7 +64,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 title: Text('User anlegen'),
                 children: [
                   Text('Fehlgeschlagen'),
-                  Text(ex.message),
+                  Text(ex.message ?? ''),
                 ],
               ));
 

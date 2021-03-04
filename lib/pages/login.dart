@@ -47,8 +47,8 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     SharedPreferences.getInstance().then((prefs) {
       if (prefs.containsKey('username') && prefs.containsKey('password')) {
-        var userName = prefs.getString('username');
-        var password = prefs.getString('password');
+        var userName = prefs.getString('username')!;
+        var password = prefs.getString('password')!;
         _login(context, userName, password);
       }
     });

@@ -64,8 +64,7 @@ class _EditSamplePageState extends State<EditSamplePage> {
         .child(imageName!)
         .putData(imageData);
 
-    await uploadTask.onComplete;
-    return true;
+    return await uploadTask.resume();
   }
 
   @override

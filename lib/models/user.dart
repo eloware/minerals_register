@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class LocalUser {
   UserCredential? firebaseCredential;
 
-  String get userId => firebaseCredential!.user.uid;
+  String get userId => firebaseCredential!.user!.uid;
   String? name;
 
   String get samplePath => 'users/$userId/samples';

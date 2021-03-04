@@ -71,6 +71,7 @@ class _SampleImageState extends State<SampleImage> {
     if (result == null) return;
 
     var image = await ImagePicker().getImage(source: result, maxWidth: 4096);
+    if (image == null) return;
     var imageData = await image.readAsBytes();
     setState(() {
       _image = imageData;
