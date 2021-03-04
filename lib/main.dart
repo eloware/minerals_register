@@ -12,7 +12,7 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
-  static FirebaseApp app;
+  static FirebaseApp? app;
 
   @override
   Widget build(BuildContext context) {

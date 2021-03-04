@@ -25,7 +25,7 @@ class _SignUpPageState extends State<SignUpPage> {
       '[a-z0-9!#\$%&\'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#\$%&\'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?';
 
   Future<void> _register(BuildContext context) async {
-    if (!_formKey.currentState.validate()) return;
+    if (!_formKey.currentState!.validate()) return;
 
     if (!(_registration.privacy && _registration.license)) {
       await showDialog(
@@ -103,7 +103,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 decoration: InputDecoration(labelText: 'Name'),
               ),
               TextFormField(
-                validator: (value) => RegExp(MailRegex).hasMatch(value)
+                validator: (value) => RegExp(MailRegex).hasMatch(value!)
                     ? null
                     : 'Keine gültige Mailadresse',
                 onChanged: (value) => _registration.mailAddress = value,

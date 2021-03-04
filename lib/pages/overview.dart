@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 class OverviewPage extends StatelessWidget {
   Future<void> _addSample(BuildContext context) async {
     var sample =
-        (await Navigator.of(context).pushNamed(Routes.EditSample)) as Sample;
+        (await Navigator.of(context).pushNamed(Routes.EditSample)) as Sample?;
     if (sample == null) return;
   }
 
@@ -86,17 +86,17 @@ class OverviewPage extends StatelessWidget {
 }
 
 class _SampleListTile extends StatelessWidget {
-  final Sample sample;
+  final Sample? sample;
 
-  const _SampleListTile({Key key, this.sample}) : super(key: key);
+  const _SampleListTile({Key? key, this.sample}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text('${sample.serial} - ${sample.mineral}'),
+      title: Text('${sample!.serial} - ${sample!.mineral}'),
       subtitle: Text(
-          'Gefunden ${sample.location ?? '💁‍♂️'} am ${sample.timeStamp != null ? Formats.dateFormat.format(sample.timeStamp) : 'Keine Angabe'}'),
-      trailing: Text(sample.value != null
+          'Gefunden ${sample!.location ?? '💁‍♂️'} am ${sample!.timeStamp != null ? Formats.dateFormat.format(sample!.timeStamp!) : 'Keine Angabe'}'),
+      trailing: Text(sample!.value != null
           ? Formats.currencyFormat.format(sample?.value ?? 0)
           : '<na>'),
       onTap: () =>
