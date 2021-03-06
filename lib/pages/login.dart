@@ -10,23 +10,18 @@ class LoginPage extends StatelessWidget {
   final TextEditingController _passwordController = TextEditingController();
 
   void _login(BuildContext context, String username, String password) async {
-    if ((username ?? '') == '' || (password ?? '') == '')
-      return;
-
     try {
       var user = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: username, password: password);
 
-      if (user != null) {
-        context.read<LocalUser>().firebaseCredential = user;
+      context.read<LocalUser>().firebaseCredential = user;
 
-        var prefs = await SharedPreferences.getInstance();
-        prefs.setString('username', _usernameController.text);
-        prefs.setString('password', _passwordController.text);
+      var prefs = await SharedPreferences.getInstance();
+      prefs.setString('username', _usernameController.text);
+      prefs.setString('password', _passwordController.text);
 
-        Navigator.of(context)
-            .pushNamedAndRemoveUntil(Routes.Overview, (route) => false);
-      }
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil(Routes.Overview, (route) => false);
     } on FirebaseAuthException catch (ex) {
       showDialog(
           context: context,

@@ -55,8 +55,7 @@ class _EditSamplePageState extends State<EditSamplePage> {
   }
 
   Future<bool> _saveImage(Uint8List? imageData, String? imageName) async {
-    if (imageData == null)
-      return true;
+    if (imageData == null) return true;
 
     var uploadTask = FirebaseStorage.instance
         .ref()
@@ -161,6 +160,17 @@ class _EditSamplePageState extends State<EditSamplePage> {
                   initialValue:
                       Formats.doubleFormat.format(widget.sample?.value ?? 0.0),
                 ),
+                if (["GS", "2", "4"].contains(widget.sample?.size))
+                  DropdownButton<String>(
+                    value: widget.sample?.size,
+                    onChanged: (value) => setState((){
+                      widget.sample?.size = value;
+                    }),
+                    items: ["GS", "2", "4"]
+                        .map((e) =>
+                            DropdownMenuItem<String>(value: e, child: Text(e)))
+                        .toList(),
+                  ),
                 TextFormField(
                   onChanged: (v) => _sample!.size = v,
                   decoration: InputDecoration(labelText: 'Größe'),
