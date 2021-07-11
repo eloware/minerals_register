@@ -29,7 +29,7 @@ class LoginPage extends StatelessWidget {
                 title: Text('Fehler'),
                 content: Text('Fehler bei der Anmeldung ${ex.message}'),
                 actions: [
-                  OutlineButton(
+                  OutlinedButton(
                     child: Text('Ok'),
                     onPressed: () => Navigator.of(context).pop(),
                   )
@@ -66,12 +66,12 @@ class LoginPage extends StatelessWidget {
                 decoration: InputDecoration(labelText: 'Passwort'),
                 obscureText: true,
               ),
-              RaisedButton(
+              ElevatedButton(
                 onPressed: () => _login(context, _usernameController.text,
                     _passwordController.text),
                 child: Text('Login'),
               ),
-              FlatButton(
+              TextButton(
                 child: Text(
                   'Neu hier...',
                   style: TextStyle(color: Colors.blue),

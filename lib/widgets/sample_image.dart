@@ -52,17 +52,17 @@ class _SampleImageState extends State<SampleImage> {
         builder: (context) => CupertinoAlertDialog(
               title: Text('Quelle wählen'),
               actions: [
-                FlatButton(
+                TextButton(
                   child: Text('Kamera'),
                   onPressed: () =>
                       Navigator.of(context).pop(ImageSource.camera),
                 ),
-                FlatButton(
+                TextButton(
                   child: Text('Galerie'),
                   onPressed: () =>
                       Navigator.of(context).pop(ImageSource.gallery),
                 ),
-                FlatButton(
+                TextButton(
                   child: Text('Abbrechen'),
                   onPressed: () => Navigator.of(context).pop(),
                 ),

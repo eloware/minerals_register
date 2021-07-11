@@ -31,7 +31,7 @@ class _EditSamplePageState extends State<EditSamplePage> {
 
     var imageName = widget.sample?.id;
     if (widget.sample?.id == null) {
-      var reference = await FirebaseDatabase.instance
+      var reference = FirebaseDatabase.instance
           .reference()
           .child(context.read<LocalUser>().samplePath)
           .push();

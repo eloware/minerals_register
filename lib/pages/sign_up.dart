@@ -37,7 +37,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 children: [
                   Text(
                       'Sie müssen die Lizenzbestimmungen und die Datenschutzvereinbarung akzeptieren um forzufahren'),
-                  OutlineButton(
+                  OutlinedButton(
                     child: Text('Ok'),
                     onPressed: () => Navigator.of(context).pop(),
                   )
@@ -144,7 +144,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   )
                 ],
               ),
-              RaisedButton(
+              ElevatedButton(
                 child: Text('Anmelden'),
                 onPressed: () async => await _register(context),
               ),

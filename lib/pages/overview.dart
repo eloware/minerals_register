@@ -47,7 +47,7 @@ class OverviewPage extends StatelessWidget {
               Expanded(
                 child: Container(),
               ),
-              FlatButton(
+              TextButton(
                 child: Text('Logout'),
                 onPressed: () {
                   context.read<LocalUser>().logout();
