@@ -25,7 +25,7 @@ class _SignUpPageState extends State<SignUpPage> {
       '[a-z0-9!#\$%&\'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#\$%&\'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?';
 
   Future<void> _register(BuildContext context) async {
-    if (!_formKey.currentState.validate()) return;
+    if (!_formKey.currentState!.validate()) return;
 
     if (!(_registration.privacy && _registration.license)) {
       await showDialog(
@@ -37,7 +37,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 children: [
                   Text(
                       'Sie müssen die Lizenzbestimmungen und die Datenschutzvereinbarung akzeptieren um forzufahren'),
-                  OutlineButton(
+                  OutlinedButton(
                     child: Text('Ok'),
                     onPressed: () => Navigator.of(context).pop(),
                   )
@@ -64,7 +64,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 title: Text('User anlegen'),
                 children: [
                   Text('Fehlgeschlagen'),
-                  Text(ex.message),
+                  Text(ex.message ?? ''),
                 ],
               ));
 
@@ -103,7 +103,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 decoration: InputDecoration(labelText: 'Name'),
               ),
               TextFormField(
-                validator: (value) => RegExp(MailRegex).hasMatch(value)
+                validator: (value) => RegExp(MailRegex).hasMatch(value!)
                     ? null
                     : 'Keine gültige Mailadresse',
                 onChanged: (value) => _registration.mailAddress = value,
@@ -144,7 +144,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   )
                 ],
               ),
-              RaisedButton(
+              ElevatedButton(
                 child: Text('Anmelden'),
                 onPressed: () async => await _register(context),
               ),

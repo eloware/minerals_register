@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 class LoadingData extends StatelessWidget {
 
-  final String text;
+  final String? text;
 
-  const LoadingData({Key key, this.text}) : super(key: key);
+  const LoadingData({Key? key, this.text}) : super(key: key);
 
   @override
   Widget build(BuildContext context) => Center(

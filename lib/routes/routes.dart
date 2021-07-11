@@ -24,10 +24,10 @@ class Routes {
         return MaterialPageRoute(builder: (context) => SignUpPage());
 
       case Details:
-        return MaterialPageRoute(builder: (context)=>SampleDetailsPage(sample: settings.arguments as Sample,));
+        return MaterialPageRoute(builder: (context)=>SampleDetailsPage(sample: settings.arguments as Sample?,));
 
       case EditSample:
-        return MaterialPageRoute(builder: (context)=>EditSamplePage(sample: settings.arguments as Sample,));
+        return MaterialPageRoute(builder: (context)=>EditSamplePage(sample: settings.arguments as Sample?,));
 
       case Overview:
         return MaterialPageRoute(
@@ -40,9 +40,9 @@ class Routes {
 }
 
 class RouteError extends StatelessWidget {
-  final String route;
+  final String? route;
 
-  const RouteError({Key key, this.route}) : super(key: key);
+  const RouteError({Key? key, this.route}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +59,7 @@ class RouteError extends StatelessWidget {
               'Route not found',
               style: Theme.of(context).textTheme.headline6,
             ),
-            Text(route),
+            Text(route!),
           ],
         ),
       ),

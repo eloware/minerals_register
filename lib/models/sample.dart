@@ -13,20 +13,20 @@ class Sample {
     'MICROPROBE'
   ];
 
-  String id;
-  String serial;
-  String mineral;
-  String location;
-  DateTime timeStamp;
-  double value;
-  String origin;
-  String size;
-  String annotation;
-  String sideMineral;
-  String imageName;
-  String geoLocation;
-  String analytics;
-  String sampleNumber;
+  String? id;
+  String? serial;
+  String? mineral;
+  String? location;
+  DateTime? timeStamp;
+  double? value;
+  String? origin;
+  String? size;
+  String? annotation;
+  String? sideMineral;
+  String? imageName;
+  String? geoLocation;
+  String? analytics;
+  String? sampleNumber;
 
   Sample();
 
@@ -46,5 +46,5 @@ class Sample {
           ?.entries
           ?.map<Sample>((e) => Sample.fromDb(e))
           ?.toList() ??
-      List<Sample>();
+      List<Sample>.empty(growable: true);
 }

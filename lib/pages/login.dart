@@ -10,23 +10,18 @@ class LoginPage extends StatelessWidget {
   final TextEditingController _passwordController = TextEditingController();
 
   void _login(BuildContext context, String username, String password) async {
-    if ((username ?? '') == '' || (password ?? '') == '')
-      return;
-
     try {
       var user = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: username, password: password);
 
-      if (user != null) {
-        context.read<LocalUser>().firebaseCredential = user;
+      context.read<LocalUser>().firebaseCredential = user;
 
-        var prefs = await SharedPreferences.getInstance();
-        prefs.setString('username', _usernameController.text);
-        prefs.setString('password', _passwordController.text);
+      var prefs = await SharedPreferences.getInstance();
+      prefs.setString('username', _usernameController.text);
+      prefs.setString('password', _passwordController.text);
 
-        Navigator.of(context)
-            .pushNamedAndRemoveUntil(Routes.Overview, (route) => false);
-      }
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil(Routes.Overview, (route) => false);
     } on FirebaseAuthException catch (ex) {
       showDialog(
           context: context,
@@ -34,7 +29,7 @@ class LoginPage extends StatelessWidget {
                 title: Text('Fehler'),
                 content: Text('Fehler bei der Anmeldung ${ex.message}'),
                 actions: [
-                  OutlineButton(
+                  OutlinedButton(
                     child: Text('Ok'),
                     onPressed: () => Navigator.of(context).pop(),
                   )
@@ -47,8 +42,8 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     SharedPreferences.getInstance().then((prefs) {
       if (prefs.containsKey('username') && prefs.containsKey('password')) {
-        var userName = prefs.getString('username');
-        var password = prefs.getString('password');
+        var userName = prefs.getString('username')!;
+        var password = prefs.getString('password')!;
         _login(context, userName, password);
       }
     });
@@ -71,12 +66,12 @@ class LoginPage extends StatelessWidget {
                 decoration: InputDecoration(labelText: 'Passwort'),
                 obscureText: true,
               ),
-              RaisedButton(
+              ElevatedButton(
                 onPressed: () => _login(context, _usernameController.text,
                     _passwordController.text),
                 child: Text('Login'),
               ),
-              FlatButton(
+              TextButton(
                 child: Text(
                   'Neu hier...',
                   style: TextStyle(color: Colors.blue),

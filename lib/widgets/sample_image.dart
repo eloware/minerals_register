@@ -8,14 +8,14 @@ import 'package:minerals_register/models/user.dart';
 import 'package:provider/provider.dart';
 
 class SampleImage extends StatefulWidget {
-  final String imageName;
+  final String? imageName;
   final bool canChange;
-  final Function(Uint8List) changedImage;
-  final Function() cancelChanges;
-  final bool autoSave;
+  final Function(Uint8List?)? changedImage;
+  final Function()? cancelChanges;
+  final bool? autoSave;
 
   SampleImage(
-      {Key key,
+      {Key? key,
       this.imageName,
       this.canChange = false,
       this.changedImage,
@@ -23,7 +23,7 @@ class SampleImage extends StatefulWidget {
       this.autoSave})
       : super(key: key) {
     if (canChange &&
-        !autoSave &&
+        !autoSave! &&
         (changedImage == null || cancelChanges == null))
       throw 'canChange requires changeImage and cancelChanges function';
   }
@@ -33,13 +33,13 @@ class SampleImage extends StatefulWidget {
 }
 
 class _SampleImageState extends State<SampleImage> {
-  Uint8List _image;
+  Uint8List? _image;
   bool _hasChanged = false;
 
   Future<void> _removeImage(BuildContext context) async {
     await Future.delayed(Duration(seconds: 1));
 
-    widget.changedImage(null);
+    widget.changedImage!(null);
     setState(() {
       _image = null;
       _hasChanged = true;
@@ -47,22 +47,22 @@ class _SampleImageState extends State<SampleImage> {
   }
 
   Future<void> _changeImage(BuildContext context) async {
-    ImageSource result = await showDialog(
+    ImageSource? result = await showDialog(
         context: context,
         builder: (context) => CupertinoAlertDialog(
               title: Text('Quelle wählen'),
               actions: [
-                FlatButton(
+                TextButton(
                   child: Text('Kamera'),
                   onPressed: () =>
                       Navigator.of(context).pop(ImageSource.camera),
                 ),
-                FlatButton(
+                TextButton(
                   child: Text('Galerie'),
                   onPressed: () =>
                       Navigator.of(context).pop(ImageSource.gallery),
                 ),
-                FlatButton(
+                TextButton(
                   child: Text('Abbrechen'),
                   onPressed: () => Navigator.of(context).pop(),
                 ),
@@ -71,12 +71,13 @@ class _SampleImageState extends State<SampleImage> {
     if (result == null) return;
 
     var image = await ImagePicker().getImage(source: result, maxWidth: 4096);
+    if (image == null) return;
     var imageData = await image.readAsBytes();
     setState(() {
       _image = imageData;
       _hasChanged = true;
     });
-    if (widget.changedImage != null) widget.changedImage(imageData);
+    if (widget.changedImage != null) widget.changedImage!(imageData);
   }
 
   Widget _getImageWidget() {
@@ -87,7 +88,7 @@ class _SampleImageState extends State<SampleImage> {
         size: 80,
       );
 
-    if (_hasChanged || widget.imageName == null) return Image.memory(_image);
+    if (_hasChanged || widget.imageName == null) return Image.memory(_image!);
 
     return _FirestoreImage(imageName: widget.imageName);
   }
@@ -138,9 +139,9 @@ class _SampleImageState extends State<SampleImage> {
 }
 
 class _FirestoreImage extends StatelessWidget {
-  final String imageName;
+  final String? imageName;
 
-  const _FirestoreImage({Key key, this.imageName}) : super(key: key);
+  const _FirestoreImage({Key? key, this.imageName}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -148,12 +149,12 @@ class _FirestoreImage extends StatelessWidget {
       future: FirebaseStorage.instance
           .ref()
           .child(context.watch<LocalUser>().userId)
-          .child(imageName)
+          .child(imageName!)
           .getDownloadURL(),
       builder: (context, snapshot) {
         if (snapshot.hasData)
           return Image.network(
-            snapshot.data,
+            snapshot.data as String,
             loadingBuilder: (context, child, loadingProgress) =>
                 loadingProgress == null ? child : CircularProgressIndicator(),
           );
