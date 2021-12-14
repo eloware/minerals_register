@@ -40,7 +40,7 @@ class Sample {
       Sample.fromJson(Map<String, dynamic>.from(data.value))..id = data.key;
 
   static List<Sample> listFromDb(AsyncSnapshot<dynamic> snapshot) =>
-      (snapshot.data as Event)
+      snapshot.data
           .snapshot
           .value
           ?.entries
